@@ -1,0 +1,28 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+# build:
+#   local:
+#     push: false
+#   artifacts:
+#     - image: ormelaver/users
+#       context: users
+#       docker:
+#         dockerfile: Dockerfile
+#       sync:
+#         manual:
+#           - src: 'src/**/*.ts'
+#             dest: .
+#     - image: ormelaver/client-weft
+#       context: client
+#       docker:
+#         dockerfile: Dockerfile
+#       sync:
+#         manual:
+#           - src: '**/*.tsx'
+#             dest: .
+#           - src: '**/*.ts'
+#             dest: .
+deploy:
+  kubectl:
+    manifests:
+      - 'mysql/**'
