@@ -1,14 +1,17 @@
 import express, { Request, Response } from 'express';
 import { user } from '../utils/users';
-const USERS_PER_PAGE = 4;
 const router = express.Router();
 
-router.get('/api/users/:page', async (req: Request, res: Response) => {
-  const userList = await user.getUsers();
-  const page = parseInt(req.params.page);
-  const startIndex = USERS_PER_PAGE * (page - 1);
-  const endIndex = startIndex + USERS_PER_PAGE;
-  res.send(userList.slice(startIndex, endIndex));
+router.get('/api/users', async (req: Request, res: Response) => {
+  if (!req.query.page) {
+    throw new Error('please provide a page number');
+  }
+  try {
+    const userList = await user.getUsers();
+    res.send(userList);
+  } catch (error: any) {
+    throw new Error(error);
+  }
 });
 
 export { router as getAllUsersRouter };
