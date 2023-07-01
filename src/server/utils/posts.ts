@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {
-  getUserPostsFromDB,
-  populatePosts,
+  getRowsByCondition,
+  populateTable,
   deleteRow,
   getStoredUserIds,
 } from '../services/mysql';
@@ -20,7 +20,11 @@ class Post {
     return Post.instance;
   }
 
-  public async getPosts(userId: number) {
+  public async getPosts(
+    userId: number,
+    pageNumber: number = 1,
+    limit: number = 10
+  ) {
     const isUserInPostList = this.isUserInPostList(userId);
     let userPosts;
     if (!isUserInPostList) {
@@ -30,12 +34,21 @@ class Post {
       const newPosts = await axios.get(
         `https://jsonplaceholder.typicode.com/posts?userId=${userId}`
       );
-      await populatePosts(newPosts.data);
+
+      await populateTable(
+        'posts',
+        ['userId', 'id', 'title', 'body'],
+        newPosts.data
+      );
+
       this.updateUserPostsList(userId);
       userPosts = newPosts.data;
     } else {
       console.log('User posts exist in DB, fetching from DB...');
-      userPosts = await getUserPostsFromDB(userId);
+      userPosts = await getRowsByCondition('posts', ['*'], 'userId', userId, [
+        'ORDER BY id ASC',
+        `LIMIT ${limit * (pageNumber - 1)}, ${limit}`,
+      ]);
     }
 
     return userPosts;

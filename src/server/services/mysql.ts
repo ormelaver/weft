@@ -1,7 +1,5 @@
 import mysql, { Connection, RowDataPacket } from 'mysql2/promise';
 import { PostType } from '../types/post';
-import axios from 'axios';
-// import { arrangeData } from '../utils/dataUtils';
 
 let connection: Connection;
 const connectMySql = async () => {
@@ -14,14 +12,29 @@ const connectMySql = async () => {
 
     await createDB('posts');
     await connection.query('USE posts');
-    await createTable('posts');
+    await createTable(
+      'posts',
+      [
+        'id int(11) NOT NULL',
+        'userId int(11) NOT NULL',
+        'title varchar(255) DEFAULT NULL',
+        'body varchar(255) DEFAULT NULL',
+      ],
+      ['id', 'userId']
+    );
   } catch (error: any) {
     throw new Error(error);
   }
 };
 
-export const createTable = async (tableName: string): Promise<void> => {
-  const query = `CREATE TABLE IF NOT EXISTS ${tableName} (id int(11) NOT NULL, userId int(11) NOT NULL, title varchar(255) DEFAULT NULL, body varchar(255) DEFAULT NULL, PRIMARY KEY (id, userId))`;
+export const createTable = async (
+  tableName: string,
+  columnNames: string[],
+  primaryKeys: string[]
+): Promise<void> => {
+  const query = `CREATE TABLE IF NOT EXISTS ${tableName} (${[...columnNames]} ${
+    primaryKeys ? `,PRIMARY KEY (${primaryKeys})` : ')'
+  })`;
 
   try {
     await connection.query(query);
@@ -58,9 +71,12 @@ export const deleteRow = async (
   }
 };
 
-export const populatePosts = async (data: PostType[]): Promise<void> => {
-  const query = `INSERT INTO posts (userId, id, title, body) VALUES ?`;
-  // console.log('data', data);
+export const populateTable = async (
+  tableName: string,
+  columnNames: string[],
+  data: PostType[]
+): Promise<void> => {
+  const query = `INSERT INTO ${tableName} (${[...columnNames]}) VALUES ?`;
 
   try {
     const values = [
@@ -75,18 +91,26 @@ export const populatePosts = async (data: PostType[]): Promise<void> => {
   }
 };
 
-export const getUserPostsFromDB = async (
-  userId: number
-): Promise<RowDataPacket[] | boolean> => {
-  const query = `SELECT id, userId, title, body FROM posts WHERE userId=${userId}`;
-
+export const getRowsByCondition = async (
+  tableName: string,
+  columnNames: string[],
+  columnName: string,
+  columnValue: string | number,
+  constraints: string[]
+) => {
+  const query = `SELECT ${[
+    ...columnNames,
+  ]} FROM ${tableName} WHERE ${columnName}=${columnValue} ${constraints.join(
+    ' '
+  )}`;
+  console.log(query);
   try {
     const [userPosts] = await connection.query<RowDataPacket[]>(query);
 
     if (userPosts.length > 0) {
       return userPosts;
     } else {
-      return false;
+      return [];
     }
   } catch (error: any) {
     throw new Error(error);
@@ -98,9 +122,7 @@ export const getStoredUserIds = async (): Promise<RowDataPacket[]> => {
   try {
     const [userIds] = await connection.query<RowDataPacket[]>(query);
 
-    // if (userIds.length > 0) {
     return userIds;
-    // }
   } catch (error: any) {
     throw new Error(error);
   }

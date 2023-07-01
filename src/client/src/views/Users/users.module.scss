@@ -1,0 +1,81 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f1e7fe;
+  color: black;
+  padding: 2rem;
+}
+
+.cellStyle {
+  width: 150px;
+}
+
+.cellSpanStyle {
+  width: 50px;
+  display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.tableStyle {
+  width: 70%;
+  margin: 2rem auto;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+}
+
+.tableHeaderCellStyle {
+  background-color: #f9f9f9;
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.nameColumnCellStyle {
+  @extend .tableHeaderCellStyle;
+  cursor: pointer;
+}
+
+.tableBodyCellStyle {
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
+  background-color: #ebebeb;
+}
+
+.pageContainerStyle {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.pageLinkStyle {
+  margin: 0.5rem;
+  color: #000;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.currentPageStyle {
+  font-weight: bold;
+  color: #ccc;
+}
+
+.linkStyle {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.ellipsisClickStyle {
+  text-overflow: unset;
+  width: 100%;
+  white-space: unset;
+}
+
+.userNameLinkStyle {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}

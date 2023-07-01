@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { arrangeData } from './dataUtils';
+import { arrangeData } from './data-utils';
 import { UserType } from '../types/user';
 
 class User {

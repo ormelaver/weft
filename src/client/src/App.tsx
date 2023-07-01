@@ -1,20 +1,23 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import GetUsers from './GetUsers';
-import GetPosts from './GetPosts';
+import {
+  HashRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
+import Posts from './views/Posts/Posts';
+import Users from './views/Users/Users';
+
 import 'bootstrap/dist/css/bootstrap.css';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="posts" element={<GetPosts />} />
-        <Route path="/" element={<GetUsers />} />
+        <Route path="/" element={<Navigate to="/users?page=1" />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/posts" element={<Posts />} />
       </Routes>
     </Router>
-    // <div>
-    //   <GetUsers />
-    // </div>
   );
 }
 

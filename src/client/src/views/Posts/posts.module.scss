@@ -1,0 +1,57 @@
+.deleteIconStyle {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  cursor: pointer;
+}
+
+.containerStyle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f1e7fe;
+  color: black;
+  padding: 2rem;
+}
+
+.tableStyle {
+  width: 70%;
+  margin: 2rem auto;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+}
+
+.headlineStyle {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.searchBoxStyle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: white;
+  padding: 0.5rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tableHeaderCellStyle {
+  background-color: #f9f9f9;
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.tableBodyCellStyle {
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
+  background-color: #ebebeb;
+}
+
+.trashIconCellStyle {
+  @extend .tableBodyCellStyle;
+  position: relative;
+}
