@@ -1,9 +1,10 @@
 import { app } from './app';
 import { connectMySql } from './services/mysql';
 import Post from './utils/Posts';
+import 'dotenv/config';
 
 const post = Post.getInstance();
-const PORT = 3001;
+const PORT = process.env.PORT;
 
 const start = async () => {
   await connectMySql();

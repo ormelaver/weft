@@ -19,9 +19,9 @@ const Posts = () => {
   const fetchPosts = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3001/api/posts/?userId=${userId}&page=${page}` // &limit=5
+        `http://localhost:3001/api/posts/?userId=${userId}` // &page=${page}&limit=5
       );
-      const fetchedPosts = res.data;
+      const fetchedPosts = res.data.data;
       setPosts(fetchedPosts);
     } catch (error) {
       navigate(`/`);

@@ -26,14 +26,17 @@ class Post {
     limit: number = 10
   ) {
     const isUserInPostList = this.isUserInPostList(userId);
+    const startIndex = (pageNumber - 1) * limit;
+    const endIndex = pageNumber * limit;
     let userPosts;
     if (!isUserInPostList) {
       console.log(
         'User posts do not exist in DB, fetching from external API...'
       );
-      const newPosts = await axios.get(
-        `https://jsonplaceholder.typicode.com/posts?userId=${userId}`
-      );
+      if (!process.env.POSTS_EXTERNAL_API) {
+        throw new Error('No posts data source provided');
+      }
+      const newPosts = await axios.get(process.env.POSTS_EXTERNAL_API + userId);
 
       await populateTable(
         'posts',
@@ -42,7 +45,7 @@ class Post {
       );
 
       this.updateUserPostsList(userId);
-      userPosts = newPosts.data;
+      userPosts = newPosts.data.slice(startIndex, endIndex);
     } else {
       console.log('User posts exist in DB, fetching from DB...');
       userPosts = await getRowsByCondition('posts', ['*'], 'userId', userId, [
@@ -51,7 +54,11 @@ class Post {
       ]);
     }
 
-    return userPosts;
+    return {
+      data: userPosts,
+      pageNumber,
+      limit,
+    };
   }
 
   public async deletePosts(userId: number, postId: number): Promise<void> {

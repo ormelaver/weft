@@ -9,11 +9,17 @@ router.get('/api/posts', async (req: Request, res: Response) => {
   }
 
   const userId = parseInt(req.query.userId as string);
-  const limit = parseInt(req.query.limit as string) || 10;
-  const pageNumber = parseInt(req.query.page as string) || 1;
+  const limit =
+    (req.query.limit as string) || (process.env.POSTS_PAGE_LIMIT as string);
+  const pageNumber =
+    (req.query.page as string) || (process.env.DEFAULT_PAGE_NUMBER as string);
 
   try {
-    const userPosts = await post.getPosts(userId, pageNumber, limit);
+    const userPosts = await post.getPosts(
+      userId,
+      parseInt(pageNumber),
+      parseInt(limit)
+    );
 
     res.status(200).send(userPosts);
   } catch (error: any) {

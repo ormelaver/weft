@@ -5,9 +5,9 @@ let connection: Connection;
 const connectMySql = async () => {
   try {
     connection = await mysql.createPool({
-      host: 'localhost',
-      user: 'root',
-      password: '1234',
+      host: process.env.MYSQL_HOST,
+      user: process.env.MYSQL_ROOT_USER,
+      password: process.env.MYSQL_PASSWORD,
     });
 
     await createDB('posts');
@@ -103,7 +103,7 @@ export const getRowsByCondition = async (
   ]} FROM ${tableName} WHERE ${columnName}=${columnValue} ${constraints.join(
     ' '
   )}`;
-  console.log(query);
+
   try {
     const [userPosts] = await connection.query<RowDataPacket[]>(query);
 
